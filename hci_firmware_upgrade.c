@@ -371,7 +371,7 @@ uint32_t hci_dfu_handle_command( uint8_t *p_data, uint32_t length )
 
 /*
  * Handle response to read config command received over the UART.
- * Respond with desired block size. The HCI master should set all commands
+ * Respond with desired block size. The HCI central should set all commands
  * to write download data to this size. This provides for efficient
  * data handling.
  */
