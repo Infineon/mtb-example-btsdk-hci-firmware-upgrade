@@ -209,16 +209,10 @@ hci_dfu_app_management_cback(wiced_bt_management_evt_t event, wiced_bt_managemen
 void hci_dfu_init()
 {
 #ifdef WICED_BT_TRACE_ENABLE
-    wiced_result_t status;
-
     WICED_BT_TRACE("Init dfu\n");
     /* Starting the app timer */
     wiced_init_timer(&dfu_timer, hci_dfu_timeout, 0, WICED_SECONDS_PERIODIC_TIMER);
-    status = wiced_start_timer(&dfu_timer, 1);
-    if (status != WICED_SUCCESS)
-    {
-        WICED_BT_TRACE("%s: wiced_start_timer failed, status:%d \n", __func__, status);
-    }
+    wiced_start_timer(&dfu_timer, 1);
 
     /* Register callback for receiving hci traces */
     wiced_bt_dev_register_hci_trace(hci_dfu_trace_callback);
