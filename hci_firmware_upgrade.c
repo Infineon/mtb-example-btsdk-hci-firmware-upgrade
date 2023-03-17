@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -381,26 +381,23 @@ void hci_dfu_read_config(void)
     wiced_transport_send_data( HCI_CONTROL_DFU_EVENT_CONFIG, tx_buf, cmd );
 }
 
+
+#if defined(COMPONENT_20819A1)
+    #define HCI_DFU_CHIP 20819
+#elif defined(COMPONENT_20820A1)
+    #define HCI_DFU_CHIP 20820
+#elif defined(CHIP)
+    #define HCI_DFU_CHIP CHIP
+#else
+    #error Expected CHIP or csp COMPONENT_* definition
+#endif
+
 /* Handle get version command */
 void hci_control_misc_handle_get_version( void )
 {
     uint8_t   tx_buf[15];
     uint8_t   cmd = 0;
-
-// If this is 20819 or 20820, we do detect the device from hardware
-#define RADIO_ID    0x006007c0
-#define RADIO_20820 0x80
-#define CHIP_20820  20820
-#define CHIP_20819  20819
-#if (CHIP==CHIP_20819) || (CHIP==CHIP_20820)
-    uint32_t chip = CHIP_20819;
-    if (*(UINT32*) RADIO_ID & RADIO_20820)
-    {
-        chip = CHIP_20820;
-    }
-#else
-    uint32_t  chip = CHIP;
-#endif
+    uint32_t  chip = HCI_DFU_CHIP;
 
     tx_buf[cmd++] = WICED_SDK_MAJOR_VER;
     tx_buf[cmd++] = WICED_SDK_MINOR_VER;
